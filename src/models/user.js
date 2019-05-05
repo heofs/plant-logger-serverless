@@ -7,7 +7,6 @@ const crypto = require("crypto");
 dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 //Schema of user
-
 exports.userTypeDef = `
     type User {
         ID: String
