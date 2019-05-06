@@ -41,10 +41,6 @@ functions:
     handler: src/handler.graphql
     events:
       - http:
-          path: graphql
-          method: post
-          cors: true
-      - http:
-          path: graphql
+          path: query
           method: get
           cors: true
