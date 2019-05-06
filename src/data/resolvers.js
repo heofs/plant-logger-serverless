@@ -3,29 +3,15 @@
 const AWS = require("aws-sdk");
 const promisify = require("../functions/promisify");
 const crypto = require("crypto");
+// const uuidv1 = require('uuid/v1');
+// uuidv1();
 
-dynamoDb = new AWS.DynamoDB.DocumentClient();
+dynamo = new AWS.DynamoDB.DocumentClient();
 
-//Schema of user
-
-exports.userTypeDef = `
-    type User {
-        ID: String
-        email: String
-        country: String
-    }
-    type Query {
-        user(ID: String!): User
-    }
-    type Mutation {
-        createUser(email: String): Boolean
-        updateUser(ID: String, country: String): User
-    }
-`;
-
-exports.userResolvers = {
+exports.resolvers = {
   Query: {
-    user: (_, { ID }) => getUser(ID)
+    user: (_, { ID }) => getUser(ID),
+    allUsers: (_, {}) => allUsers()
   },
   Mutation: {
     createUser: (_, { email }) => createUser(email),
@@ -37,7 +23,7 @@ exports.userResolvers = {
 
 const createUser = email =>
   promisify(callback =>
-    dynamoDb.put(
+    dynamo.put(
       {
         TableName: process.env.USER_TABLE,
         Item: {
@@ -63,7 +49,7 @@ const createUser = email =>
 
 const getUser = ID =>
   promisify(callback =>
-    dynamoDb.get(
+    dynamo.get(
       {
         TableName: process.env.USER_TABLE,
         Key: { ID }
@@ -79,9 +65,23 @@ const getUser = ID =>
     })
     .catch(error => console.error(error));
 
+const allUsers = () =>
+  promisify(callback =>
+    dynamo.scan(
+      {
+        TableName: process.env.USER_TABLE
+      },
+      callback
+    )
+  )
+    .then(result => {
+      return result.Items;
+    })
+    .catch(error => console.error(error));
+
 const updateUser = (ID, country) =>
   promisify(callback =>
-    dynamoDb.update(
+    dynamo.update(
       {
         TableName: process.env.USER_TABLE,
         Key: { ID },

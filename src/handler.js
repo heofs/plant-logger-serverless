@@ -1,12 +1,12 @@
 //handler.js
 
 const { ApolloServer, gql } = require("apollo-server-lambda");
-const { userTypeDef, userResolvers } = require("./src/models/user");
+const { typeDefinitions } = require("./data/schema");
+const { resolvers } = require("./data/resolvers");
 
 const typeDefs = gql`
-  ${userTypeDef}
+  ${typeDefinitions}
 `;
-const resolvers = userResolvers;
 
 const server = new ApolloServer({
   typeDefs,
