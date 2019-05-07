@@ -1,5 +1,5 @@
 {
-  "name": "green-book",
+  "name": "plant-logger-serverless",
   "version": "1.0.0",
   "description": "NodeJS API with GraphQL",
   "main": "index.js",

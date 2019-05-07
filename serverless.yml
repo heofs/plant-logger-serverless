@@ -1,6 +1,6 @@
 #serverless.yml
 
-service: green-book
+service: plant-logger
 
 provider:
   name: aws
